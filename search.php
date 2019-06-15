@@ -1,57 +1,38 @@
-<?php
-/**
- * The template for displaying search results pages.
- *
- * @link    https://developer.wordpress.org/themes/basics/template-hierarchy/#search-result
- *
- * @package Shapely
- */
-get_header();
-$layout_class = shapely_get_layout_class(); ?>
-	<div class="row">
-		<?php
-		if ( $layout_class == 'sidebar-left' ):
-			get_sidebar();
-		endif;
-		?>
-		<section id="primary" class="content-area col-md-8 mb-xs-24 <?php echo esc_attr( $layout_class ); ?>">
-			<main id="main" class="site-main" role="main">
+<?php get_header(); ?>
 
-				<?php
-				if ( have_posts() ) : ?>
-
-					<header class="entry-header nolist">
-						<h1 class="post-title entry-title"><?php printf( esc_html__( 'Search Results for: %s', 'shapely' ), '<span>' . get_search_query() . '</span>' ); ?></h1>
-					</header><!-- .page-header -->
-
+	<div class="container">
+		<div class="row">
+			<div class="has-padding">
+				<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
 					<?php
-					/* Start the Loop */
-					while ( have_posts() ) : the_post();
+					if ( have_posts() ) {
 
-						/**
-						 * Run the loop for the search to output the results.
-						 * If you want to overload this in a child theme then include a file
-						 * called content-search.php and that will be used instead.
-						 */
-						get_template_part( 'template-parts/content', 'search' );
+						while ( have_posts() ) {
+							the_post();
+							get_template_part( 'template-parts/content', get_post_format() );
+						}
+					} else {
+						get_template_part( 'template-parts/content', 'none' );
+					}
+					?>
+				</div><!--/.col-lg-8-->
+				<aside class="col-lg-3 col-md-3 col-sm-3 hidden-xs pull-right">
+					<div class="pixova-blog-sidebar">
+						<?php
+						if ( is_active_sidebar( 'blog-sidebar' ) ) {
+							dynamic_sidebar( 'blog-sidebar' );
+						} else {
+							the_widget( 'WP_Widget_Search', sprintf( 'title=%s', __( 'Search', 'pixova-lite' ) ) );
+							the_widget( 'WP_Widget_Calendar', sprintf( 'title=%s', __( 'Calendar', 'pixova-lite' ) ) );
+						}
+						?>
+					</div> <!--/.pixova-blog-sidebar-->
+				</aside><!--/.col-lg-3-->
+				<nav class="pixova-custom-pagination col-lg-12">
+					<?php the_posts_pagination(); ?>
+				</nav><!--/.pixova-custom-pagination-->
+			</div><!--/section-->
+		</div><!--/.row-->
+	</div><!--/.container-->
 
-					endwhile;
-
-					shapely_pagination();
-				else :
-
-					get_template_part( 'template-parts/content', 'none' );
-
-				endif; ?>
-
-			</main><!-- #main -->
-		</section><!-- #primary -->
-
-		<?php
-		if ( $layout_class == 'sidebar-right' ):
-			get_sidebar();
-		endif;
-		?>
-	</div>
-<?php
-get_footer();
+<?php get_footer(); ?>

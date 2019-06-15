@@ -1,710 +1,440 @@
 <?php
-/**
- * Custom functions that act independently of the theme templates.
- *
- * Eventually, some of the functionality here could be replaced by core features.
- *
- * @package Shapely
- */
 
-/**
- * Adds custom classes to the array of body classes.
- *
- * @param array $classes Classes for the body element.
- *
- * @return array
- */
-function shapely_body_classes( $classes ) {
-	// Adds a class of group-blog to blogs with more than 1 published author.
-	if ( is_multi_author() ) {
-		$classes[] = 'group-blog';
-	}
-
-	// Adds a class of hfeed to non-singular pages.
-	if ( ! is_singular() ) {
-		$classes[] = 'hfeed';
-	}
-
-	if ( get_theme_mod( 'shapely_sidebar_position' ) == "pull-right" ) {
-		$classes[] = 'has-sidebar-left';
-	} else if ( get_theme_mod( 'shapely_sidebar_position' ) == "no-sidebar" ) {
-		$classes[] = 'has-no-sidebar';
-	} else if ( get_theme_mod( 'shapely_sidebar_position' ) == "full-width" ) {
-		$classes[] = 'has-full-width';
-	} else {
-		$classes[] = 'has-sidebar-right';
-	}
-
-	return $classes;
-}
-
-add_filter( 'body_class', 'shapely_body_classes' );
-
-/**
- * Get our wp_nav_menu() fallback, wp_page_menu(), to show a home link.
- *
- * @param array $args Configuration arguments.
- *
- * @return array
- */
-function shapely_page_menu_args( $args ) {
-	$args['show_home'] = true;
-
-	return $args;
-}
-
-add_filter( 'wp_page_menu_args', 'shapely_page_menu_args' );
-
-// Mark Posts/Pages as Untiled when no title is used
-add_filter( 'the_title', 'shapely_title' );
-
-function shapely_title( $title ) {
-	if ( $title == '' ) {
-		return esc_html__( 'Untitled', 'shapely' );
-	} else {
-		return $title;
-	}
-}
-
-/**
- * Password protected post form using Boostrap classes
- */
-add_filter( 'the_password_form', 'shapely_custom_password_form' );
-
-function shapely_custom_password_form() {
-	global $post;
-	$label = 'pwbox-' . ( empty( $post->ID ) ? rand() : $post->ID );
-	$o     = '<form class="protected-post-form" action="' . get_option( 'siteurl' ) . '/wp-login.php?action=postpass" method="post">
-  <div class="row">
-    <div class="col-lg-10">
-        <p>' . esc_html__( "This post is password protected. To view it please enter your password below:", 'shapely' ) . '</p>
-        <label for="' . esc_attr( $label ) . '">' . esc_html__( "Password:", 'shapely' ) . ' </label>
-      <div class="input-group">
-        <input class="form-control" value="' . esc_attr( get_search_query() ) . '" name="post_password" id="' . esc_attr( $label ) . '" type="password">
-        <span class="input-group-btn"><button type="submit" class="btn btn-default" name="submit" id="searchsubmit" value="' . esc_attr__( "Submit", 'shapely' ) . '">' . esc_html__( "Submit", 'shapely' ) . '</button>
-        </span>
-      </div>
-    </div>
-  </div>
-</form>';
-
-	return $o;
-}
-
-// Add Bootstrap classes for table
-add_filter( 'the_content', 'shapely_add_custom_table_class' );
-function shapely_add_custom_table_class( $content ) {
-	return preg_replace( '/(<table) ?(([^>]*)class="([^"]*)")?/', '$1 $3 class="$4 table table-hover" ', $content );
-}
-
-if ( ! function_exists( 'shapely_header_menu' ) ) :
+if ( ! function_exists( 'pixova_lite_body_classes' ) ) {
 	/**
-	 * Header menu (should you choose to use one)
+	 * Adds custom classes to the array of body classes.
+	 *
+	 * @param array $classes Classes for the body element.
+	 *
+	 * @return array
 	 */
-	function shapely_header_menu() {
-		// display the WordPress Custom Menu if available
-		wp_nav_menu( array(
-			             'menu_id'         => 'menu',
-			             'theme_location'  => 'primary',
-			             'depth'           => 3,
-			             'container'       => 'div',
-			             'container_class' => 'collapse navbar-collapse navbar-ex1-collapse',
-			             'menu_class'      => 'menu',
-			             'fallback_cb'     => 'wp_bootstrap_navwalker::fallback',
-			             'walker'          => new wp_bootstrap_navwalker()
-		             ) );
-	} /* end header menu */
-endif;
 
-/**
- * function to show the footer info, copyright information
- */
-function shapely_footer_info() {
-	printf( esc_html__( 'Theme by %1$s Powered by %2$s', 'shapely' ), '<a href="https://colorlib.com/" target="_blank" title="Colorlib">Colorlib</a>', '<a href="http://wordpress.org/" target="_blank" title="WordPress.org">WordPress</a>' );
-}
+	function pixova_lite_body_classes( $classes ) {
 
+		// Adds a class of group-blog to blogs with more than 1 published author.
 
-if ( ! function_exists( 'shapely_get_theme_options' ) ) {
-	/**
-	 * Get information from Theme Options and add it into wp_head
-	 */
-	function shapely_get_theme_options() {
-
-		echo '<style type="text/css">';
-
-		if ( get_theme_mod( 'link_color' ) ) {
-			echo 'a {color:' . esc_attr( get_theme_mod( 'link_color' ) ) . '}';
-		}
-		if ( get_theme_mod( 'link_hover_color' ) ) {
-			echo 'a:hover, a:active, .post-title a:hover,
-        .woocommerce nav.woocommerce-pagination ul li a:focus, .woocommerce nav.woocommerce-pagination ul li a:hover,
-        .woocommerce nav.woocommerce-pagination ul li span.current  { color: ' . esc_attr( get_theme_mod( 'link_hover_color' ) ) . ';}';
+		if ( is_multi_author() ) {
+			$classes[] = 'group-blog';
 		}
 
-		if ( get_theme_mod( 'button_color' ) ) {
-			echo '.btn-filled, .btn-filled:visited, .woocommerce #respond input#submit.alt,
-          .woocommerce a.button.alt, .woocommerce button.button.alt,
-          .woocommerce input.button.alt, .woocommerce #respond input#submit,
-          .woocommerce a.button, .woocommerce button.button,
-          .woocommerce input.button { background:' . esc_attr( get_theme_mod( 'button_color' ) ) . ' !important; border: 2px solid' . esc_attr( get_theme_mod( 'button_color' ) ) . ' !important;}';
-		}
-		if ( get_theme_mod( 'button_hover_color' ) ) {
-			echo '.btn-filled:hover, .woocommerce #respond input#submit.alt:hover,
-          .woocommerce a.button.alt:hover, .woocommerce button.button.alt:hover,
-          .woocommerce input.button.alt:hover, .woocommerce #respond input#submit:hover,
-          .woocommerce a.button:hover, .woocommerce button.button:hover,
-          .woocommerce input.button:hover  { background: ' . esc_attr( get_theme_mod( 'button_hover_color' ) ) . ' !important; border: 2px solid' . esc_attr( get_theme_mod( 'button_hover_color' ) ) . ' !important;}';
+		// Add a class if there is a custom header.
+		if ( has_header_image() ) {
+			$classes[] = 'has-header-image';
 		}
 
-		if ( get_theme_mod( 'social_color' ) ) {
-			echo '.social-icons li a {color: ' . esc_attr( get_theme_mod( 'social_color' ) ) . ' !important ;}';
-		}
+		return $classes;
 
-		echo '</style>';
 	}
-}
-add_action( 'wp_head', 'shapely_get_theme_options', 10 );
 
-/**
- * Add Bootstrap thumbnail styling to images with captions
- * Use <figure> and <figcaption>
- *
- * @link http://justintadlock.com/archives/2011/07/01/captions-in-wordpress
- */
-function shapely_caption( $output, $attr, $content ) {
-	if ( is_feed() ) {
+	add_filter( 'body_class', 'pixova_lite_body_classes' );
+}
+
+if ( ! function_exists( 'pixova_lite_wp_title' ) ) {
+	if ( ! function_exists( '_wp_render_title_tag' ) ) {
+		/**
+		 * Filters wp_title to print a neat <title> tag based on what is being viewed.
+		 *
+		 * @param string $title Default title text for current view.
+		 * @param string $sep Optional separator.
+		 *
+		 * @return string The filtered title.
+		 */
+
+		function pixova_lite_wp_title( $title, $sep ) {
+
+			if ( is_feed() ) {
+
+				return $title;
+
+			}
+
+			global $page, $paged;
+
+			// Add the blog name
+			$title .= get_bloginfo( 'name', 'display' );
+
+			// Add the blog description for the home/front page.
+			$site_description = get_bloginfo( 'description', 'display' );
+			if ( $site_description && ( is_home() || is_front_page() ) ) {
+				$title .= " $sep $site_description";
+
+			}
+
+			// Add a page number if necessary:
+
+			if ( $paged >= 2 || $page >= 2 ) {
+				$title .= " $sep " . sprintf( __( 'Page %s', 'pixova-lite' ), max( $paged, $page ) );
+			}
+
+			return $title;
+
+		}
+
+		add_filter( 'wp_title', 'pixova_lite_wp_title', 10, 2 );
+	}// End if().
+}// End if().
+
+if ( ! function_exists( 'pixova_lite_setup_author' ) ) {
+	/**
+	 * Sets the authordata global when viewing an author archive.
+	 *
+	 * This provides backwards compatibility with
+	 * http://core.trac.wordpress.org/changeset/25574
+	 *
+	 * It removes the need to call the_post() and rewind_posts() in an author
+	 * template to print information about the author.
+	 *
+	 * @global WP_Query $wp_query WordPress Query object.
+	 * @return void
+	 */
+
+	function pixova_lite_setup_author() {
+
+		global $wp_query;
+
+		if ( $wp_query->is_author() && isset( $wp_query->post ) ) {
+			$GLOBALS['authordata'] = get_userdata( $wp_query->post->post_author );
+
+		}
+
+	}
+
+	add_action( 'wp', 'pixova_lite_setup_author' );
+}
+
+
+// Function to convert hex color codes to rgba
+if ( ! function_exists( 'pixova_lite_hex2rgba' ) ) {
+	function pixova_lite_hex2rgba( $color, $opacity = false ) {
+
+		$default = 'rgb(0,0,0)';
+
+		//Return default if no color provided
+		if ( empty( $color ) ) {
+			return $default;
+		}
+
+		//Sanitize $color if "#" is provided
+		if ( '#' == $color[0] ) {
+			$color = substr( $color, 1 );
+		}
+
+		//Check if color has 6 or 3 characters and get values
+		if ( strlen( $color ) == 6 ) {
+			$hex = array( $color[0] . $color[1], $color[2] . $color[3], $color[4] . $color[5] );
+		} elseif ( strlen( $color ) == 3 ) {
+			$hex = array( $color[0] . $color[0], $color[1] . $color[1], $color[2] . $color[2] );
+		} else {
+			return $default;
+		}
+
+		//Convert hexadec to rgb
+		$rgb = array_map( 'hexdec', $hex );
+
+		//Check if opacity is set(rgba or rgb)
+		if ( $opacity ) {
+			if ( abs( $opacity ) > 1 ) {
+				$opacity = 1.0;
+			}
+			$output = 'rgba(' . implode( ',', $rgb ) . ',' . $opacity . ')';
+		} else {
+			$output = 'rgb(' . implode( ',', $rgb ) . ')';
+		}
+
+		//Return rgb(a) color string
 		return $output;
 	}
+}// End if().
 
-	$defaults = array(
-		'id'      => 'shapely_caption_' . rand( 1, 192282 ),
-		'align'   => 'alignnone',
-		'width'   => '',
-		'caption' => ''
-	);
+if ( ! function_exists( 'pixova_lite_post_nav' ) ) {
 
-	$attr = shortcode_atts( $defaults, $attr );
+	/**
+	 * Display navigation to next/previous post when applicable.
+	 */
 
-	// If the width is less than 1 or there is no caption, return the content wrapped between the [caption] tags
-	if ( $attr['width'] < 1 || empty( $attr['caption'] ) ) {
-		return $content;
-	}
+	function pixova_lite_post_nav() {
 
-	$output = '<figure id="' . esc_attr( $attr['id'] ) . '" class="thumbnail wp-caption ' . esc_attr( $attr['align'] ) . ' style="width: ' . ( esc_attr( $attr['width'] ) + 10 ) . 'px">';
-	$output .= do_shortcode( $content );
-	$output .= '<figcaption class="caption wp-caption-text">' . esc_html( $attr['caption'] ) . '</figcaption>';
-	$output .= '</figure>';
+		// Don't print empty markup if there's nowhere to navigate.
+		$previous = ( is_attachment() ) ? get_post( get_post()->post_parent ) : get_adjacent_post( false, '', true );
+		$next     = get_adjacent_post( false, '', false );
 
-	return $output;
-}
-
-add_filter( 'img_caption_shortcode', 'shapely_caption', 10, 3 );
-
-/**
- * Adds the URL to the top level navigation menu item
- */
-function shapely_add_top_level_menu_url( $atts, $item, $args ) {
-	if ( ! wp_is_mobile() && isset( $args->has_children ) && $args->has_children ) {
-		$atts['href'] = ! empty( $item->url ) ? esc_url( $item->url ) : '';
-	}
-
-	return $atts;
-}
-
-add_filter( 'nav_menu_link_attributes', 'shapely_add_top_level_menu_url', 99, 3 );
-
-/**
- * Makes the top level navigation menu item clickable
- */
-function shapely_make_top_level_menu_clickable() {
-	if ( ! wp_is_mobile() ) { ?>
-		<script type="text/javascript">
-			jQuery(document).ready(function ($) {
-				if ( $(window).width() >= 767 ) {
-					$('.navbar-nav > li.menu-item > a').click(function () {
-						window.location = $(this).attr('href');
-					});
-				}
-			});
-		</script>
-	<?php }
-}
-
-add_action( 'wp_footer', 'shapely_make_top_level_menu_clickable', 1 );
-
-/*
- * Add Read More button to post archive
- */
-function shapely_excerpt_more( $more ) {
-	return '<div><a class="btn-filled btn" href="' . esc_url( get_the_permalink() ) . '" title="' . the_title_attribute( array( 'echo' => false ) ) . '">' . esc_html_x( 'Read More', 'Read More', 'shapely' ) . '</a></div>';
-}
-
-add_filter( 'excerpt_more', 'shapely_excerpt_more' );
-
-/*
- * Pagination
- */
-if ( ! function_exists( 'shapely_pagination' ) ) {
-
-	function shapely_pagination() {
-		?>
-		<div class="text-center">
-			<nav class="pagination">
-				<?php
-				the_posts_pagination( array(
-					                      'mid_size'  => 2,
-					                      'prev_text' => '<icon class="fa fa-angle-left"></icon>',
-					                      'next_text' => '<icon class="fa fa-angle-right"></icon>',
-				                      ) ); ?>
-			</nav>
-		</div>
-		<?php
-	}
-}
-
-/*
- * Search Widget
- */
-function shapely_search_form( $form ) {
-	$form = '<form role="search" method="get" id="searchform" class="search-form" action="' . esc_url( home_url( '/' ) ) . '" >
-    <label class="screen-reader-text" for="s">' . esc_html__( 'Search for:', 'shapely' ) . '</label>
-    <input type="text" placeholder="' . esc_html__( 'Type Here', 'shapely' ) . '" type="text" value="' . esc_attr( get_search_query() ) . '" name="s" id="s" />
-    <input type="submit" class="btn btn-fillded searchsubmit" id="searchsubmit" value="' . esc_attr__( 'Search', 'shapely' ) . '" />
-
-    </form>';
-
-	return $form;
-}
-
-add_filter( 'get_search_form', 'shapely_search_form', 100 );
-
-
-/*
- * Author bio on single page
- */
-if ( ! function_exists( 'shapely_author_bio' ) ) {
-
-	function shapely_author_bio() {
-
-		if ( ! get_the_ID() ) {
+		if ( ! $next && ! $previous ) {
 			return;
 		}
-
-		$author_displayname = get_the_author_meta( 'display_name' );
-		$author_nickname    = get_the_author_meta( 'nickname' );
-		$author_fullname    = ( get_the_author_meta( 'first_name' ) != "" && get_the_author_meta( 'last_name' ) != "" ) ? get_the_author_meta( 'first_name' ) . " " . get_the_author_meta( 'last_name' ) : "";
-		$author_email       = get_the_author_meta( 'email' );
-		$author_description = get_the_author_meta( 'description' );
-		$author_name = ( trim( $author_nickname ) != "" ) ? $author_nickname : ( trim( $author_displayname ) != "" ) ? $author_displayname : $author_fullname ?>
-
-		<div class="author-bio">
-			<div class="row">
-				<div class="col-sm-2">
-					<div class="avatar">
-						<?php echo get_avatar( get_the_author_meta( 'ID' ), 100 ); ?>
-					</div>
-				</div>
-				<div class="col-sm-10">
-					<b class="fn"><?php echo esc_html( $author_name ); ?></b>
-					<p><?php
-						if ( trim( $author_description ) != "" ) {
-							echo esc_html( $author_description );
-						} ?>
-					</p>
-					<a class="author-email"
-					   href="mailto:<?php echo esc_attr( antispambot( $author_email ) ); ?>"><?php echo esc_html( antispambot( $author_email ) ); ?></a>
-					<ul class="list-inline social-list author-social">
-						<?php
-						$twitter_profile = get_the_author_meta( 'twitter' );
-						if ( $twitter_profile && $twitter_profile != '' ) { ?>
-							<li>
-							<a href="<?php echo esc_url( $twitter_profile ); ?>">
-								<i class="fa fa-twitter"></i>
-							</a>
-							</li><?php
-						}
-
-						$fb_profile = get_the_author_meta( 'facebook' );
-						if ( $fb_profile && $fb_profile != '' ) { ?>
-							<li>
-							<a href="<?php echo esc_url( $fb_profile ); ?>">
-								<i class="fa fa-facebook"></i>
-							</a>
-							</li><?php
-						}
-
-						$dribble_profile = get_the_author_meta( 'dribble' );
-						if ( $dribble_profile && $dribble_profile != '' ) { ?>
-							<li>
-								<a href="<?php echo esc_url( $dribble_profile ); ?>">
-									<i class="fa fa-dribbble"></i>
-								</a>
-							</li>
-							<?php
-						}
-
-						$github_profile = get_the_author_meta( 'github' );
-						if ( $github_profile && $github_profile != '' ) { ?>
-							<li>
-							<a href="<?php echo esc_url( $github_profile ); ?>">
-								<i class="fa fa-vimeo"></i>
-							</a>
-							</li><?php
-						}
-
-						$vimeo_profile = get_the_author_meta( 'vimeo' );
-						if ( $vimeo_profile && $vimeo_profile != '' ) { ?>
-							<li>
-							<a href="<?php echo esc_url( $vimeo_profile ); ?>">
-								<i class="fa fa-github"></i>
-							</a>
-							</li><?php
-						} ?>
-					</ul>
-				</div>
-			</div>
-		</div>
-		<!--end of author-bio-->
-		<?php
-
-	}
-}
-if ( ! function_exists( 'shapely_author_bio' ) ) {
-
-	function shapely_author_bio() {
-
-		if ( ! get_the_ID() ) {
-			return;
-		}
-
-		$author_displayname = get_the_author_meta( 'display_name' );
-		$author_nickname    = get_the_author_meta( 'nickname' );
-		$author_fullname    = ( get_the_author_meta( 'first_name' ) != "" && get_the_author_meta( 'last_name' ) != "" ) ? get_the_author_meta( 'first_name' ) . " " . get_the_author_meta( 'last_name' ) : "";
-		$author_email       = get_the_author_meta( 'email' );
-		$author_description = get_the_author_meta( 'description' );
-		$author_name = ( trim( $author_nickname ) != "" ) ? $author_nickname : ( trim( $author_displayname ) != "" ) ? $author_displayname : $author_fullname ?>
-
-		<div class="author-bio">
-			<div class="row">
-				<div class="col-sm-2">
-					<div class="avatar">
-						<?php echo get_avatar( get_the_author_meta( 'ID' ), 100 ); ?>
-					</div>
-				</div>
-				<div class="col-sm-10">
-					<b class="fn"><?php echo esc_html( $author_name ); ?></b>
-					<p><?php
-						if ( trim( $author_description ) != "" ) {
-							echo esc_html( $author_description );
-						} ?>
-					</p>
-					<a class="author-email"
-					   href="mailto:<?php echo esc_attr( antispambot( $author_email ) ); ?>"><?php echo esc_html( antispambot( $author_email ) ); ?></a>
-					<ul class="list-inline social-list author-social">
-						<?php
-						$twitter_profile = get_the_author_meta( 'twitter' );
-						if ( $twitter_profile && $twitter_profile != '' ) { ?>
-							<li>
-							<a href="<?php echo esc_url( $twitter_profile ); ?>">
-								<i class="fa fa-twitter"></i>
-							</a>
-							</li><?php
-						}
-
-						$fb_profile = get_the_author_meta( 'facebook' );
-						if ( $fb_profile && $fb_profile != '' ) { ?>
-							<li>
-							<a href="<?php echo esc_url( $fb_profile ); ?>">
-								<i class="fa fa-facebook"></i>
-							</a>
-							</li><?php
-						}
-
-						$dribble_profile = get_the_author_meta( 'dribble' );
-						if ( $dribble_profile && $dribble_profile != '' ) { ?>
-							<li>
-								<a href="<?php echo esc_url( $dribble_profile ); ?>">
-									<i class="fa fa-dribbble"></i>
-								</a>
-							</li>
-							<?php
-						}
-
-						$github_profile = get_the_author_meta( 'github' );
-						if ( $github_profile && $github_profile != '' ) { ?>
-							<li>
-							<a href="<?php echo esc_url( $github_profile ); ?>">
-								<i class="fa fa-vimeo"></i>
-							</a>
-							</li><?php
-						}
-
-						$vimeo_profile = get_the_author_meta( 'vimeo' );
-						if ( $vimeo_profile && $vimeo_profile != '' ) { ?>
-							<li>
-							<a href="<?php echo esc_url( $vimeo_profile ); ?>">
-								<i class="fa fa-github"></i>
-							</a>
-							</li><?php
-						} ?>
-					</ul>
-				</div>
-			</div>
-		</div>
-		<!--end of author-bio-->
-		<?php
-
-	}
-}
-/**
- * Custom comment template
- */
-function shapely_cb_comment( $comment, $args, $depth ) {
-	$GLOBALS['comment'] = $comment;
-	extract( $args, EXTR_SKIP );
-
-	if ( 'ul' == $args['style'] ) {
-		$tag       = 'ul';
-		$add_below = 'comment';
-	} else {
-		$tag       = 'li';
-		$add_below = 'div-comment';
-	}
-	?>
-	<li <?php comment_class( empty( $args['has_children'] ) ? '' : 'parent' ) ?> id="comment-<?php comment_ID() ?>">
-		<?php if ( 'div' != $args['style'] ) : ?>
-		<div id="div-comment-<?php comment_ID() ?>" class="comment-body">
-			<?php endif; ?>
-			<div class="avatar">
-				<?php if ( $args['avatar_size'] != 0 ) {
-					echo get_avatar( $comment, $args['avatar_size'] );
-				} ?>
-			</div>
-			<div class="comment">
-				<b class="fn"><?php echo esc_html( get_comment_author() ); ?></b>
-				<div class="comment-date">
-					<time datetime="2016-01-28T12:43:17+00:00">
-						<?php
-						/* translators: 1: date, 2: time */
-						printf( __( '%1$s at %2$s', 'shapely' ), get_comment_date(), get_comment_time() ); ?></time><?php edit_comment_link( esc_html__( 'Edit', 'shapely' ), '  ', '' );
-					?>
-				</div>
-
-				<?php comment_reply_link( array_merge( $args, array(
-					'add_below' => $add_below,
-					'depth'     => $depth,
-					'max_depth' => $args['max_depth']
-				) ) ); ?>
-
-				<?php if ( $comment->comment_approved == '0' ) : ?>
-					<p>
-						<em class="comment-awaiting-moderation"><?php esc_html_e( 'Your comment is awaiting moderation.', 'shapely' ); ?></em>
-						<br/>
-					</p>
-				<?php endif; ?>
-
-				<?php comment_text(); ?>
-
-			</div>
-			<?php if ( 'div' != $args['style'] ) : ?>
-		</div>
-	<?php endif; ?>
-	</li>
-	<?php
-}
-
-/*
- * Filter to replace
- * Reply button class
- */
-function shapely_reply_link_class( $class ) {
-	$class = str_replace( "class='comment-reply-link", "class='btn btn-sm comment-reply", $class );
-
-	return $class;
-}
-
-/*
- * Comment form template
- */
-function shapely_custom_comment_form() {
-	$commenter = wp_get_current_commenter();
-	$req       = get_option( 'require_name_email' );
-	$aria_req  = ( $req ? " aria-required='true'" : '' );
-	$fields    = array(
-		'author' =>
-			'<input id="author" placeholder="' . esc_html__( 'Your Name', 'shapely' ) . ( $req ? '*' : '' ) . '" name="author" type="text" value="' . esc_attr( $commenter['comment_author'] ) .
-			'" size="30" ' . $aria_req . ' required="required" />',
-
-		'email' =>
-			'<input id="email" name="email" type="email" placeholder="' . esc_html__( 'Email Address', 'shapely' ) . ( $req ? '*' : '' ) . '" value="' . esc_attr( $commenter['comment_author_email'] ) .
-			'" size="30"' . $aria_req . ' required="required" />',
-
-		'url' =>
-			'<input placeholder="' . esc_html__( 'Your Website (optional)', 'shapely' ) . '" id="url" name="url" type="text" value="' . esc_attr( $commenter['comment_author_url'] ) .
-			'" size="30" />',
-	);
-
-	$comments_args = array(
-		'label_submit'  => esc_html__( 'Leave Comment', 'shapely' ),
-		'comment_field' => '<textarea placeholder="' . _x( 'Comment', 'noun', 'shapely' ) . '" id="comment" name="comment" cols="45" rows="8" aria-required="true" required="required">' .
-		                   '</textarea>',
-		'fields'        => apply_filters( 'comment_form_default_fields', $fields )
-	);
-
-
-	return $comments_args;
-}
-
-/*
- * Header Logo
- */
-function shapely_get_header_logo() {
-	$logo_id = get_theme_mod( 'custom_logo', '' );
-	$logo    = wp_get_attachment_image_src( $logo_id, 'full' ); ?>
-
-	<a href="<?php echo esc_url( home_url( '/' ) ); ?>"><?php
-	if ( $logo[0] != '' ) { ?>
-		<img src="<?php echo esc_url( $logo[0] ); ?>" class="logo"
-		     alt="<?php echo esc_html( get_bloginfo( 'name' ) ); ?>"><?php
-	} else { ?>
-		<span class="site-title"><?php echo esc_html( get_bloginfo( 'name' ) ); ?></span><?php
-	} ?>
-	</a><?php
-}
-
-/*
- * Get layout class from single page
- * then from themeoptions
- */
-function shapely_get_layout_class() {
-	if ( is_singular() ) {
-		$template     = get_page_template_slug();
-		$layout_class = '';
-		switch ( $template ) {
-			case 'page-templates/full-width.php':
-				$layout_class = 'full-width';
-				break;
-			case 'page-templates/no-sidebar.php':
-				$layout_class = 'no-sidebar';
-				break;
-			case 'page-templates/sidebar-left.php':
-				$layout_class = 'sidebar-left';
-				break;
-			case 'page-templates/sidebar-right.php':
-				$layout_class = 'sidebar-right';
-				break;
-			default:
-				$layout_class = 'sidebar-right';
-				break;
-		}
-	} else {
-		$layout_class = get_theme_mod( 'blog_layout_template', 'sidebar-right' );
-	}
-
-	return $layout_class;
-}
-
-/*
- * Show Sidebar or not
- */
-function shapely_show_sidebar() {
-	global $post;
-	$show_sidebar = true;
-	if ( is_singular() && ( get_post_meta( $post->ID, 'site_layout', true ) ) ) {
-		if ( get_post_meta( $post->ID, 'site_layout', true ) == 'no-sidebar' || get_post_meta( $post->ID, 'site_layout', true ) == 'full-width' ) {
-			$show_sidebar = false;
-		}
-	} elseif ( get_theme_mod( 'shapely_sidebar_position' ) == "no-sidebar" || get_theme_mod( 'shapely_sidebar_position' ) == "full-width" ) {
-		$show_sidebar = false;
-	}
-
-	return $show_sidebar;
-}
-
-/*
- * Top Callout
- */
-function shapely_top_callout() {
-	if ( get_theme_mod( 'top_callout', true ) ) {
-		$header = get_header_image();
 		?>
-	<section
-		class="page-title-section bg-secondary <?php echo $header ? 'header-image-bg' : '' ?>" <?php echo $header ? 'style="background-image:url(' . $header . ')"' : '' ?>>
-		<div class="container">
-			<div class="row">
+		<nav class="navigation post-navigation" role="navigation">
+			<h2 class="screen-reader-text"><?php _e( 'Post navigation', 'pixova-lite' ); ?></h2>
+
+			<div class="nav-links">
 				<?php
-				$breadcrumbs_enabled = false;
-				$title_in_post       = true;
-				if ( function_exists( 'yoast_breadcrumb' ) ) {
-					$options             = get_option( 'wpseo_internallinks' );
-					$breadcrumbs_enabled = ( $options['breadcrumbs-enable'] === true );
-					$title_in_post       = get_theme_mod( 'hide_post_title', false );
-				}
-				$header_color = get_theme_mod( 'header_textcolor', false );
+
+				previous_post_link( '<div class="nav-previous">%link</div>', _x( '<span class="meta-nav">&larr;</span> %title', 'Previous post link', 'pixova-lite' ) );
+				next_post_link( '<div class="nav-next">%link</div>', _x( '%title <span class="meta-nav">&rarr;</span>', 'Next post link', 'pixova-lite' ) );
+
 				?>
-				<?php if ( $title_in_post ): ?>
-					<div
-						class="<?php echo $breadcrumbs_enabled ? 'col-md-6 col-sm-6 col-xs-12' : 'col-xs-12'; ?>">
-						<h3 class="page-title" <?php echo $header_color ? 'style="color:#' . esc_attr( $header_color ) . '"' : '' ?>>
-							<?php
-							if ( is_home() ) {
-								echo esc_html( get_theme_mod( 'blog_name' ) ? get_theme_mod( 'blog_name' ) : __( 'Blog', 'shapely' ) );
-							} else if ( is_search() ) {
-								_e( 'Search', 'shapely' );
-							} else if ( is_archive() ) {
-								echo ( is_post_type_archive( 'jetpack-portfolio' ) ) ? esc_html__( 'Portfolio', 'shapely' ) : get_the_archive_title();
-							} else {
-								echo ( is_singular( 'jetpack-portfolio' ) ) ? esc_html__( 'Portfolio', 'shapely' ) : get_the_title();
-							} ?>
-						</h3>
-					</div>
-				<?php endif; ?>
-				<?php if ( function_exists( 'yoast_breadcrumb' ) ) { ?>
-					<?php
-					if ( $breadcrumbs_enabled ) { ?>
-						<div class="<?php echo $title_in_post ? 'col-md-6 col-sm-6' : ''; ?> col-xs-12 text-right">
-							<?php yoast_breadcrumb( '<p id="breadcrumbs">', '</p>' ); ?>
-						</div>
-					<?php } ?>
-				<?php } ?>
-
 			</div>
-			<!--end of row-->
-		</div>
-		<!--end of container-->
-		</section><?php
-	} else { ?>
-		<?php if ( function_exists( 'yoast_breadcrumb' ) ) { ?>
-			<div class="container mt20"><?php
-			yoast_breadcrumb( '<p id="breadcrumbs">', '</p>' ); ?>
-			</div><?php
+			<!-- .nav-links -->
+		</nav><!-- .navigation -->
+
+		<?php
+
+	}
+}
+
+if ( ! function_exists( 'pixova_lite_content_nav' ) ) {
+	/**
+	 * Display navigation to next/previous pages when applicable
+	 */
+	function pixova_lite_content_nav( $nav_id ) {
+		global $wp_query, $post;
+
+		// Don't print empty markup on single pages if there's nowhere to navigate.
+		if ( is_single() ) {
+			$previous = ( is_attachment() ) ? get_post( $post->post_parent ) : get_adjacent_post( false, '', true );
+			$next     = get_adjacent_post( false, '', false );
+
+			if ( ! $next && ! $previous ) {
+				return;
+			}
+		}
+
+		// Don't print empty markup in archives if there's only one page.
+		if ( $wp_query->max_num_pages < 2 && ( is_home() || is_archive() || is_search() ) ) {
+			return;
+		}
+
+		$nav_class = ( is_single() ) ? 'post-navigation' : 'paging-navigation';
+		?>
+		<nav id="<?php echo esc_attr( $nav_id ); ?>" class="<?php echo $nav_class; ?>">
+			<h2 class="screen-reader-text"><?php _e( 'Post navigation', 'pixova-lite' ); ?></h2>
+
+			<?php if ( is_single() ) : ?>
+
+				<?php previous_post_link( '<div class="nav-previous">%link</div>', '<span class="meta-nav">' . _x( '&larr;', 'Previous post link', 'pixova-lite' ) . '</span> %title' ); ?>
+				<?php next_post_link( '<div class="nav-next">%link</div>', '%title <span class="meta-nav">' . _x( '&rarr;', 'Next post link', 'pixova-lite' ) . '</span>' ); ?>
+
+			<?php elseif ( $wp_query->max_num_pages > 1 && ( is_home() || is_archive() || is_search() ) ) : ?>
+
+				<?php if ( get_next_posts_link() ) : ?>
+					<div
+							class="nav-previous"><?php next_posts_link( __( '<span class="meta-nav">&larr;</span> Older posts', 'pixova-lite' ) ); ?></div>
+				<?php endif; ?>
+
+				<?php if ( get_previous_posts_link() ) : ?>
+					<div
+							class="nav-next"><?php previous_posts_link( __( 'Newer posts <span class="meta-nav">&rarr;</span>', 'pixova-lite' ) ); ?></div>
+				<?php endif; ?>
+
+			<?php endif; ?>
+			<div class="clear"></div>
+		</nav><!-- #<?php echo esc_html( $nav_id ); ?> -->
+		<?php
+	}
+}// End if().
+
+if ( ! function_exists( 'pixova_lite_breadcrumbs' ) ) {
+	/**
+	 * Render the breadcrumbs with help of class-breadcrumbs.php
+	 *
+	 * @return void
+	 */
+	function pixova_lite_breadcrumbs() {
+		$breadcrumbs = new Pixova_Lite_Breadcrumbs();
+		$breadcrumbs->get_breadcrumbs();
+	}
+}
+
+if ( ! function_exists( 'pixova_lite_fix_responsive_videos' ) ) {
+	/*
+	/* Add responsive container to embeds
+	*/
+	function pixova_lite_fix_responsive_videos( $html ) {
+		return '<div class="pixova-lite-video-container">' . $html . '</div>';
+	}
+
+	add_filter( 'embed_oembed_html', 'pixova_lite_fix_responsive_videos', 10, 3 );
+	add_filter( 'video_embed_html', 'pixova_lite_fix_responsive_videos' ); // Jetpack
+}
+
+if ( ! function_exists( 'pixova_lite_get_number_of_comments' ) ) {
+	/**
+	 * Simple function used to return the number of comments a post has.
+	 */
+	function pixova_lite_get_number_of_comments( $post_id ) {
+
+		$num_comments = get_comments_number( $post_id ); // get_comments_number returns only a numeric value
+
+		if ( comments_open() ) {
+			if ( 0 == $num_comments ) {
+				$comments = __( 'No Comments', 'pixova-lite' );
+			} elseif ( $num_comments > 1 ) {
+				$comments = $num_comments . __( ' Comments', 'pixova-lite' );
+			} else {
+				$comments = __( '1 Comment', 'pixova-lite' );
+			}
+			$write_comments = '<a href="' . get_comments_link() . '">' . $comments . '</a>';
+		} else {
+			$write_comments = __( 'Comments are off for this post.', 'pixova-lite' );
+		}
+
+		return $write_comments;
+
+	}
+}
+
+if ( ! function_exists( 'pixova_lite_pagination' ) ) {
+	/**
+	 * Custom pagination function
+	 *
+	 * @since Pixova Lite 1.09
+	 */
+	function pixova_lite_pagination() {
+
+		$prev_arrow = is_rtl() ? '&rarr;' : '&larr;';
+		$next_arrow = is_rtl() ? '&larr;' : '&rarr;';
+
+		global $wp_query;
+		$total        = $wp_query->max_num_pages;
+		$big          = 999999999; // need an unlikely integer
+		$current_page = get_query_var( 'paged' );
+		if ( $total > 1 ) {
+			if ( ! $current_page ) {
+				$current_page = 1;
+			}
+			if ( get_option( 'permalink_structure' ) ) {
+				$format = 'page/%#%/';
+			} else {
+				$format = '&paged=%#%';
+			}
+			echo paginate_links( array(
+				'base'      => str_replace( $big, '%#%', esc_url( get_pagenum_link( $big ) ) ),
+				'format'    => $format,
+				'current'   => max( 1, get_query_var( 'paged' ) ),
+				'total'     => $total,
+				'mid_size'  => 3,
+				'type'      => 'list',
+				'prev_text' => $prev_arrow,
+				'next_text' => $next_arrow,
+			) );
+		}
+	}
+}// End if().
+
+
+# Check if it's an IIS powered server
+if ( ! function_exists( 'pixova_lite_on_iis' ) ) {
+	/**
+	 * @return bool
+	 */
+	function pixova_lite_on_iis() {
+		$s_software = strtolower( $_SERVER['SERVER_SOFTWARE'] );
+		if ( strpos( $s_software, 'microsoft-iis' ) !== false ) {
+			return true;
+		} else {
+			return false;
 		}
 	}
 }
 
-/*
- * Footer Callout
- */
-function shapely_footer_callout() {
-	if ( get_theme_mod( 'footer_callout_text' ) != '' ) { ?>
-		<section class="cfa-section bg-secondary">
-		<div class="container">
-			<div class="row">
-				<div class="col-sm-12 text-center p0">
-					<div class="overflow-hidden">
-						<div class="col-sm-9">
-							<h3 class="cfa-text"><?php echo wp_kses_post( get_theme_mod( 'footer_callout_text' ) ); ?></h3>
-						</div>
-						<div class="col-sm-3">
-							<a href='<?php echo esc_url( get_theme_mod( 'footer_callout_link' ) ); ?>'
-							   class="mb0 btn btn-lg btn-filled cfa-button">
-								<?php echo wp_kses_post( get_theme_mod( 'footer_callout_btntext' ) ); ?>
-							</a>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-		</section><?php
+#
+#   Get the page ID of the page using the blog template
+#
+#   We can't rely on the name, maybe they'll name it something other than 'Blog' ?
+#
+if ( ! function_exists( 'pixova_lite_get_page_id_by_template' ) ) {
+	function pixova_lite_get_page_id_by_template( $page_template = null ) {
+
+		# default args array
+		# page template defaults to blog-template.php
+		$args = array(
+			'post_type'  => 'page',
+			'fields'     => 'ids',
+			'nopaging'   => true,
+			'meta_key'   => '_wp_page_template',
+			'meta_value' => 'page-templates/blog-template.php',
+		);
+
+		$pages                    = get_posts( $args );
+		$pages_which_use_template = '';
+
+		if ( is_array( $pages ) ) {
+			$pages_which_use_template = array();
+			foreach ( $pages as $page ) {
+				$pages_which_use_template[] = $page;
+			}
+		} elseif ( ! is_array( $pages ) ) {
+			$pages_which_use_template = $pages;
+		} else {
+			$pages_which_use_template = '';
+		}
+
+		return $pages_which_use_template;
+
+	}
+}
+
+#
+# Custom Excerpt Length
+#
+function pixova_lite_excerpt_length( $length ) {
+	return 75;
+}
+
+add_filter( 'excerpt_length', 'pixova_lite_excerpt_length', 999 );
+
+#
+# Custom Read More
+#
+function pixova_lite_excerpt_more( $more ) {
+
+	$return_string  = '<div class="read-more-wrapper">';
+	$return_string .= '<a href="' . esc_url( get_the_permalink() ) . '" class="btn btn-green btn-read-more" role="button">' . __( 'Read more', 'pixova-lite' ) . '</a>';
+	$return_string .= '</div>';
+
+	return $return_string;
+
+}
+
+add_filter( 'excerpt_more', 'pixova_lite_excerpt_more' );
+
+if ( ! function_exists( 'pixova_lite_nice_debug' ) ) {
+	function pixova_lite_nice_debug( $var, $type = 'print_r' ) {
+
+		switch ( $type ) {
+			case 'print_r':
+				echo '<pre>';
+				print_r( $var );
+				echo '<pre>';
+
+				break;
+			case 'var_dump':
+				echo '<pre>';
+				var_dump( $var );
+				echo '<pre>';
+
+				break;
+		}
+	}
+}
+
+if ( ! function_exists( 'pixova_lite_get_customizer_image_by_url' ) ) {
+	/**
+	 * Function used to get image ID from URL
+	 * This allows us to get the resized version of an image used in the Customizer.
+	 *
+	 * @since Pixova Lite 1.39
+	 */
+	function pixova_lite_get_customizer_image_by_url( $value, $image_size = '' ) {
+
+		$id = attachment_url_to_postid( $value );
+
+		if ( $image_size ) {
+			$thumb = wp_get_attachment_image_src( $id, $image_size );
+		} else { // return full size otherwise
+			$thumb = wp_get_attachment_image_src( $id, 'full' );
+		}
+
+		return esc_url( $thumb[0] );
+
 	}
 }

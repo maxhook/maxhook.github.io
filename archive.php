@@ -1,44 +1,45 @@
-<?php
-/**
- * The template for displaying archive pages.
- *
- * @link    https://codex.wordpress.org/Template_Hierarchy
- *
- * @package Shapely
- */
-get_header(); ?>
-<?php $layout_class = shapely_get_layout_class();?>
-	<div class="row">
-		<?php
-		if ( $layout_class == 'sidebar-left' ):
-			get_sidebar();
-		endif;
-		?>
-		<div id="primary" class="col-md-8 mb-xs-24 <?php echo esc_attr( $layout_class ); ?>"><?php
-			if ( have_posts() ) :
+<?php get_header(); ?>
 
-				if ( is_home() && ! is_front_page() ) : ?>
-					<header>
-						<h1 class="page-title screen-reader-text"><?php esc_html( single_post_title() ); ?></h1>
-					</header>
+	<div class="container">
+		<div class="row">
 
-					<?php
-				endif;
+				<div class="has-padding">
+					<div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
+						<?php
+						if ( have_posts() ) {
 
-				$layout_type = get_theme_mod( 'blog_layout_view', 'grid' );
+							while ( have_posts() ) {
+								the_post();
+								get_template_part( 'template-parts/content', get_post_format() );
+							}
+						}
+						?>
+					</div><!--/.col-lg-8-->
 
-				get_template_part( 'template-parts/layouts/blog', $layout_type );
+					<div class="col-lg-3 col-md-3 col-sm-3 hidden-xs pull-right">
+						<aside class="pixova-blog-sidebar">
+							<?php
+							if ( is_active_sidebar( 'blog-sidebar' ) ) {
+								dynamic_sidebar( 'blog-sidebar' );
+							} else {
+								the_widget( 'WP_Widget_Search', sprintf( 'title=%', __( 'Search', 'pixova-lite' ) ) );
+								the_widget( 'WP_Widget_Calendar', sprintf( 'title=%s', __( 'Calendar', 'pixova-lite' ) ) );
+							}
+							?>
+						</aside> <!--/.pixova-blog-sidebar-->
+					</div><!--/.col-md-3-->
 
-				shapely_pagination();
-			else :
-				get_template_part( 'template-parts/content', 'none' );
 
-			endif; ?>
-		</div><!-- #primary -->
-		<?php
-		if ( $layout_class == 'sidebar-right' ):
-			get_sidebar();
-		endif; ?>
-	</div>
-<?php
-get_footer();
+				</div><!--/.has-padding-->
+
+		</div> <!-- /.row-->
+
+		<div class="row">
+			<div class="pixova-custom-pagination col-lg-12">
+				<?php the_posts_pagination(); ?>
+			</div>
+		</div>
+
+	</div><!--/.container-->
+
+<?php get_footer(); ?>

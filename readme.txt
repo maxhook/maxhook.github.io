@@ -1,91 +1,113 @@
-/*========= About Theme =========*/
+=== Pixova Lite ===
+Contributors:		colorlib
+Tags:               one-column, two-columns, three-columns, four-columns, right-sidebar, custom-header, custom-menu, featured-image-header, featured-images, full-width-template, threaded-comments, translation-ready
+Requires at least:	4.0
+Tested up to:		4.4.2
 
-Theme Name: Shapely
-Theme URI: https://colorlib.com/wp/shapely/
-Version: 1.1.0
-Tested up to: WP 4.7
-
-Author: Aigars Silkalns
-Author URI: https://colorlib.com/wp/
-License: GNU General Public License v3.0
-License URI: http://www.gnu.org/licenses/gpl.html
--------------------------------------------------------
-Shapely theme, Copyright 2017 colorlib.com
-Shapely WordPress theme is distributed under the terms of the GNU GPL
-Shapely is based on Underscores http://underscores.me/, (C) 2012-2017 Automattic, Inc.
--------------------------------------------------------
-
+Pixova Lite
 == Description ==
+A modern design with clean lines and styling for a wide variety of content. Exactly how a business design should be. Pixova features a custom parallax, randomised header - you can add as many images as you want to the main header area. Animations have been added, theme is optimized for loading speed.
 
-Shapely is a powerful and versatile one page WordPress theme with pixel perfect design and outstanding functionality. It is by far the most advanced free WordPress theme available today with loads of unmatched customization options. This theme comes with several homepage widgets that can be used to add portfolio, testimonials, parallax sections, your product or service information, call for action and much more.
+= License =
+Pixova Lite WordPress theme, Copyright (C) 2017 Colorlib.com
+Pixova Lite WordPress theme is licensed under the GPL3.
 
-Shapely supports most free and premium WordPress plugins such as WooCommerce, Jetpack, Gravity Forms, Contact Form 7, Yoast SEO, Google Analytics by Yoast and much more.
+Unless otherwise specified, all the theme files, scripts and images are licensed under GNU General Public License.
+The exceptions to this license are as follows:
 
-This theme is the best suited for business, landing page, portfolio, ecommerce, store, local business,  personal websites but can be tweaked to be used as blog, magazine or any other awesome website while highlighting its unique one page setup. This is going to be the last WordPress theme you will ever want to use because it is so much better than anything you have seen. We promise.
+* Bootstrap v3.3.4 (http://getbootstrap.com)
+    Copyright 2011-2014 Twitter, Inc.
+    Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
 
-== Installation ==
+* jQuery Easy Pie Chart
+    Copyright (c) Robert Fleischmann (http://robert-fleischmann.de)
+    Licensed under the MIT license. (http://www.opensource.org/licenses/mit-license.php)
 
-1. In your admin panel, go to Appearance > Themes and click the Add New button.
-2. Click Upload and Choose File, then select the theme's .zip file. Click Install Now.
-3. Click Activate to use your new theme right away.
+* jQuery Owl Carousel
+    Copyright (c) 2013 Bartosz Wojciechowski (http://owlgraphic.com/owlcarousel)
+    Licensed under the MIT license. (http://www.opensource.org/licenses/mit-license.php)
 
-For more detailed Shapely theme setup please read documentation: https://colorlib.com/wp/support/shapely/
+* jquery Query Loader 2
+    Copyright (c) 2011 - Gaya Kessler
+    Licensed under the MIT license. (http://www.opensource.org/licenses/mit-license.php)
 
-== Frequently Asked Questions ==
+* jQuery SmoothScroll
+     Copyright (C) Balazs Galambosi (maintainer) & Michael Herf     (Pulse Algorithm)
+     Licensed under the MIT license.(http://www.opensource.org/licenses/mit-license.php)
 
-= Does this theme support any plugins? =
-
-Shapely includes support for Infinite Scroll, Portfolio, Testimonials, Tiled Galleries for Jetpack.
-
-= Long menus =
-
-Shapely theme does not support long menus.
-
-= Front page template not displaying content =
-
-This page template is used to create the Parallax homepage from our demo : https://colorlib.com/shapely/ . it does not output any content added in the backend editor and we recommend using only the [Shapely] tagged widgets. 
-
-== Credits ==
-
-* Based on Underscores http://underscores.me/, (C) 2012-2017 Automattic, Inc., [GPLv2 or later](https://www.gnu.org/licenses/gpl-2.0.html)
-* normalize.css http://necolas.github.io/normalize.css/, (C) 2012-2017 Nicolas Gallagher and Jonathan Neal, [MIT](http://opensource.org/licenses/MIT)
-* TGM Plugin Activation - http://tgmpluginactivation.com/, 2011, Thomas Griffin [GPLv2 or later](https://www.gnu.org/licenses/gpl-2.0.html)
-* Bootstrap v3.3.6 (http://getbootstrap.com), Copyright 2011-2014 Twitter, Inc. Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
-* Font Awesome 4.5.0 by @davegandy - http://fontawesome.io - @fontawesome
-	License - http://fontawesome.io/license (Font: SIL OFL 1.1, CSS: MIT License)
-* WP-Bootstrap-NavWalker licensed under the GPLv2 license (http://www.gnu.org/licenses/gpl-2.0.html)
-* FlexSlider by WooThemes licensed under the GPLv2 license (http://www.gnu.org/licenses/gpl-2.0.html)
-* jQuery Smooth Scroll, https://github.com/kswedberg/jquery-smooth-scroll. Copyright (c) 2015 Karl Swedberg. Licensed MIT(https://github.com/kswedberg/jquery-smooth-scroll/blob/master/LICENSE-MIT)
-* jQuery Cloneya, Lisensed under [MIT](http://opensource.org/licenses/MIT)
+ * jQuery WOW
+     Copyright (c) 2015 Matthieu Aussaguel
+     Licensed under the MIT license. (http://www.opensource.org/licenses/mit-license.php)
 
 
-== Changelog ==
+      * Images
 
-= 1.1.0 - Jan 3 2017 =
+     	License: All unsplash.com images are licensed under the terms of the Creative Commons Zero, http://creativecommons.org/publicdomain/zero/1.0/
 
-* Major upgrade to comply with WordPress.org guidelines and best practices.
+     		 * layout/images/header-bg.jpg
+     			Source: https://download.unsplash.com/uploads/14120938606568dde6e2b/c9e42240
 
-= 1.0.5 - Sept 3 2016 =
+      * Faces are from Pixabay.com
 
-* Improved theme translation
+      * Team:
 
-= 1.0.4 - Sept 3 2016 =
+     		 * layout/images/team/teammembru-150x150.jpg
+     			Source: https://pixabay.com/en/computer-notebook-girl-work-people-1120754/
 
-* Removed deprecated tags
+             * layout/images/team/teammembru2-150x150.jpg
+                Source:  https://pixabay.com/en/man-crazy-funny-dude-sunglasses-540500/
 
-= 1.0.3 - Sept 3 2016 =
+            * layout/images/team/teammembru3-150x150.jpg
+               Source:  https://pixabay.com/en/beautiful-face-female-girl-happy-15785/
 
-* Small bug fixes and improvements
+           * layout/images/team/teammembru4-150x150.jpg
+              Source:  https://pixabay.com/en/anger-angry-bad-isolated-dangerous-18615/
 
-= 1.0.2 - April 15 2016 =
+      * Testimonials:
 
-* Fixed parse error for older version of PHP.
-* Fixed error when mobile menu was appearing along regular menu between 990px - 991px.
+             * layout/images/testimonials/teammembru_burned2-92x92.jpg
+                Source: https://pixabay.com/en/man-boy-person-portrait-face-324103/
 
-= 1.0.1 - March 30 2016 =
+             * layout/images/testimonials/teammembru_burned-92x92.jpg
+                Source: https://pixabay.com/en/man-boy-person-portrait-face-324103/
 
-* Renamed JavaScript file to get rid of not found error.
-* Updated Smooth Scroll to 1.7.2
+      * Recent works images are from Pixabay.com
 
-= 1.0.0 - March 26 2016 =
-* Initial release
+             * layout/images/recent-works/recent-works-1-270x426.jpg
+                Source:https://download.unsplash.com/photo-1416339684178-3a239570f315
+
+             * layout/images/recent-works/recent-works-2-270x426.jpg
+                Source: https://download.unsplash.com/19/desktop.JPG
+
+              * layout/images/recent-works/recent-works-3-270x426.jpg
+                Source: https://download.unsplash.com/5/unsplash-kitsune-3.jpg
+
+             * layout/images/recent-works/recent-works-4-270x426.jpg
+                Source: https://download.unsplash.com/3/doctype-hi-res.jpg
+
+        * News images are from Pixabay.com
+
+        * layout/images/blog-defaults/rand-1.jpg
+            Source:     https://pixabay.com/en/man-reading-touchscreen-blog-791049/
+
+        * layout/images/blog-defaults/rand-2.jpg
+            Source:     https://pixabay.com/en/technology-digital-tablet-792180/
+
+        * layout/images/blog-defaults/rand-3.jpg
+            Source:     https://pixabay.com/en/computer-technology-pc-947815/
+
+        * layout/images/blog-defaults/rand-4.jpg
+            Source:    https://pixabay.com/en/coffee-envelopes-work-desk-notebook-1128136/
+
+
+ * Font Awesome
+
+	License: SIL OFL 1.1
+	URL: http://scripts.sil.org/OFL
+
+ * Google Fonts:
+
+    Source Sans Pro ( Copyright 2010, 2012 Adobe Systems Incorporated )
+
+    License: SIL OFL 1.1
+    URL: http://scripts.sil.org/OFL
